@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>1e1f9218-ab51-4cba-ab52-7a3d8959b87d</ProjectGuid>
+    <OutputPath>Bin\</OutputPath>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <NuBuildVersionSource>library</NuBuildVersionSource>
+    <NuBuildVersionFileName>true</NuBuildVersionFileName>
+    <NuBuildAddBinariesToSubfolder>false</NuBuildAddBinariesToSubfolder>
+    <NuBuildIncludePdbs>false</NuBuildIncludePdbs>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Autofac.Extras.Ordering.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Autofac.Extras.Ordering\Autofac.Extras.Ordering.csproj">
+      <Name>Autofac.Extras.Ordering</Name>
+      <Project>{45a65713-6056-4ed4-8b11-1ac4af51c6cf}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\NuBuild\v1\NuBuild.targets" />
+</Project>
