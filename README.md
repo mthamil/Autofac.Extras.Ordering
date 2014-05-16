@@ -25,7 +25,7 @@ First, declare a constructor argument of type IOrderedEnumerable&lt;TDependency&
             Name = name;
         }
         
-        public string Name { get; private set;}
+        public string Name { get; private set; }
     }
 ```
 
