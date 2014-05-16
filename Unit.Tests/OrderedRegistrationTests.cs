@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using Autofac.Core;
 using Autofac.Extras.Ordering;
@@ -52,7 +53,7 @@ namespace Unit.Tests
                 Dependencies = dependencies;
             }
 
-            public IOrderedEnumerable<Dependency> Dependencies { get; private set; }
+            public IEnumerable<Dependency> Dependencies { get; private set; }
         }
 
         public class Dependency
