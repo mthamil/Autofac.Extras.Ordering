@@ -26,10 +26,26 @@ namespace Autofac.Extras.Ordering
         /// <param name="registration">Registration to set parameter on.</param>
         /// <param name="order">The order for which a service will be resolved</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
-        public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> WithOrder<TLimit, TActivatorData, TRegistrationStyle>(
+        public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> OrderBy<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, int order)
         {
-            registration.WithMetadata(OrderMetadataName, order);
+            registration.OrderBy(_ => order);
+            return registration;
+        }
+
+        /// <summary>
+        /// Configures a function that will determine a service's resolution order dynamically.
+        /// </summary>
+        /// <typeparam name="TLimit">Registration limit type.</typeparam>
+        /// <typeparam name="TActivatorData">Activator data type.</typeparam>
+        /// <typeparam name="TRegistrationStyle">Registration style.</typeparam>
+        /// <param name="registration">Registration to set parameter on.</param>
+        /// <param name="keySelector">Selects an ordering based on a component's properties</param>
+        /// <returns>A registration builder allowing further configuration of the component.</returns>
+        public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> OrderBy<TLimit, TActivatorData, TRegistrationStyle>(
+            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, Func<TLimit, IComparable> keySelector)
+        {
+            registration.WithMetadata(OrderMetadataName, keySelector);
             return registration;
         }
 
@@ -76,7 +92,7 @@ namespace Autofac.Extras.Ordering
                                  typeof(Meta<>).MakeGenericType(typeof(TService)));
             var resolved = (Meta<TService>[])context.Resolve(registeredType);
             return new AlreadyOrderedEnumerable<TService>(
-                resolved.OrderBy(x => (int)x.Metadata[OrderMetadataName])
+                resolved.OrderBy(x => ((Func<TService, IComparable>)x.Metadata[OrderMetadataName])(x.Value))
                         .Select(x => x.Value)
                         .ToArray());
         }
