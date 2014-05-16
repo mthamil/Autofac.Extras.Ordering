@@ -7,7 +7,7 @@ Usage
 =====
 First, declare a constructor argument of type IOrderedEnumerable&lt;TDependency&gt; for the component dependent on multiple services:
 
-```c#
+```C#
     public class SomeComponent
     {
         public SomeComponent(IOrderedEnumerable<Dependency> dependencies)
@@ -21,14 +21,14 @@ First, declare a constructor argument of type IOrderedEnumerable&lt;TDependency&
 
 Then, register that component using the extension method, .UsingOrdering():
 
-```c#
+```C#
     builder.RegisterType<TestComponent>()
            .UsingOrdering();
 ```
 
 Finally, register dependencies with the order in which they should be provided using the extension method .WithOrder(int):
 
-```c#
+```C#
     builder.Register(_ => new Dependency("1"))
            .WithOrder(1);
 
