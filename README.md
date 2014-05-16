@@ -32,7 +32,7 @@ First, declare a constructor argument of type IOrderedEnumerable&lt;TDependency&
 Then, register that component using the extension method, .UsingOrdering():
 
 ```C#
-    builder.RegisterType<TestComponent>()
+    builder.RegisterType<SomeComponent>()
            .UsingOrdering();
 ```
 
