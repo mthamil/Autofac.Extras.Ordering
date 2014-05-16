@@ -17,6 +17,16 @@ First, declare a constructor argument of type IOrderedEnumerable&lt;TDependency&
 
         public IEnumerable<Dependency> Dependencies { get; private set; }
     }
+    
+    public class Dependency
+    {
+        public Dependency(string name)
+        {
+            Name = name;
+        }
+        
+        public string Name { get; private set;}
+    }
 ```
 
 Then, register that component using the extension method, .UsingOrdering():
@@ -26,14 +36,24 @@ Then, register that component using the extension method, .UsingOrdering():
            .UsingOrdering();
 ```
 
-Finally, register dependencies with the order in which they should be provided using the extension method .WithOrder(int):
+Finally, register dependencies with the order in which they should be provided using the extension method .OrderBy().
 
+A constant order may be used:
 ```C#
     builder.Register(_ => new Dependency("1"))
-           .WithOrder(1);
+           .OrderBy(1);
 
     builder.Register(_ => new Dependency("2"))
-           .WithOrder(2);
+           .OrderBy(2);
+```
+
+Or, a function may be provided that determines the order based on a dependency's own properties:
+```C#
+    builder.Register(_ => new Dependency("1"))
+           .OrderBy(d => d.Name);
+
+    builder.Register(_ => new Dependency("2"))
+           .OrderBy(d => d.Name);
 ```
 
 When SomeComponent is resolved, it will be supplied with Dependencies sorted by the order each was given.

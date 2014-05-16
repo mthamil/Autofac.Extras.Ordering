@@ -45,7 +45,7 @@ namespace Autofac.Extras.Ordering
         public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> OrderBy<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, Func<TLimit, IComparable> keySelector)
         {
-            registration.WithMetadata(OrderMetadataName, keySelector);
+            registration.WithMetadata<OrderingMetadata<TLimit>>(mc => mc.For(p => p.KeySelector, keySelector));
             return registration;
         }
 
@@ -89,10 +89,11 @@ namespace Autofac.Extras.Ordering
         private static object ResolveOrderedEnumerable<TService>(IComponentContext context)
         {
             var registeredType = typeof(IEnumerable<>).MakeGenericType(
-                                 typeof(Meta<>).MakeGenericType(typeof(TService)));
-            var resolved = (Meta<TService>[])context.Resolve(registeredType);
+                                 typeof(Meta<,>).MakeGenericType(typeof(TService), 
+                                                                 typeof(OrderingMetadata<TService>)));
+            var resolved = (Meta<TService, OrderingMetadata<TService>>[])context.Resolve(registeredType);
             return new AlreadyOrderedEnumerable<TService>(
-                resolved.OrderBy(x => ((Func<TService, IComparable>)x.Metadata[OrderMetadataName])(x.Value))
+                resolved.OrderBy(x => x.Metadata.KeySelector(x.Value))
                         .Select(x => x.Value)
                         .ToArray());
         }
@@ -101,8 +102,6 @@ namespace Autofac.Extras.Ordering
             typeof(OrderedRegistration).GetMethod("ResolveOrderedEnumerable",
                                                    BindingFlags.NonPublic |
                                                    BindingFlags.Static);
-
-        private const string OrderMetadataName = "AutofacOrderedRegistration";
 
         private class AlreadyOrderedEnumerable<T> : IOrderedEnumerable<T>
         {
