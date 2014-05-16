@@ -17,7 +17,7 @@ First, declare a constructor argument of type IOrderedEnumerable&lt;TDependency&
          public IEnumerable<Dependency> Dependencies { get; private set; }
      }
 
-Then, register that component using the extension method, .WithOrdering():
+Then, register that component using the extension method, .UsingOrdering():
 
     builder.RegisterType<TestComponent>()
            .UsingOrdering();
