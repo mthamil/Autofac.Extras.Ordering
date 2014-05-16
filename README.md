@@ -7,27 +7,33 @@ Usage
 =====
 First, declare a constructor argument of type IOrderedEnumerable&lt;TDependency&gt; for the component dependent on multiple services:
 
-     public class SomeComponent
-     {
-         public SomeComponent(IOrderedEnumerable<Dependency> dependencies)
-         {
-             Dependencies = dependencies;
-         }
+```c#
+    public class SomeComponent
+    {
+        public SomeComponent(IOrderedEnumerable<Dependency> dependencies)
+        {
+            Dependencies = dependencies;
+        }
 
-         public IEnumerable<Dependency> Dependencies { get; private set; }
-     }
+        public IEnumerable<Dependency> Dependencies { get; private set; }
+    }
+```
 
 Then, register that component using the extension method, .UsingOrdering():
 
+```c#
     builder.RegisterType<TestComponent>()
            .UsingOrdering();
+```
 
 Finally, register dependencies with the order in which they should be provided using the extension method .WithOrder(int):
 
+```c#
     builder.Register(_ => new Dependency("1"))
            .WithOrder(1);
 
     builder.Register(_ => new Dependency("2"))
            .WithOrder(2);
+```
 
 When SomeComponent is resolved, it will be supplied with Dependencies sorted by the order each was given.
