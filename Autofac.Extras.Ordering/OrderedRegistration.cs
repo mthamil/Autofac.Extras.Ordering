@@ -27,7 +27,7 @@ namespace Autofac.Extras.Ordering
         /// <param name="order">The order for which a service will be resolved</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> OrderBy<TLimit, TActivatorData, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, int order)
+            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, IComparable order)
         {
             registration.OrderBy(_ => order);
             return registration;
@@ -78,12 +78,12 @@ namespace Autofac.Extras.Ordering
         private static void ConfigureOrderedEnumerableParameter(PreparingEventArgs e)
         {
             e.Parameters = e.Parameters.Union(new[]
-        {
-            new ResolvedParameter(
-                (p, c) => p.ParameterType.IsGenericType && p.ParameterType.GetGenericTypeDefinition() == typeof(IOrderedEnumerable<>),
-                (p, c) => ResolveMethod.MakeGenericMethod(p.ParameterType.GetGenericArguments().Single())
-                                       .Invoke(null, new object[] { c }))
-        });
+            {
+                new ResolvedParameter(
+                    (p, c) => p.ParameterType.IsGenericType && p.ParameterType.GetGenericTypeDefinition() == typeof(IOrderedEnumerable<>),
+                    (p, c) => ResolveMethod.MakeGenericMethod(p.ParameterType.GetGenericArguments().Single())
+                                           .Invoke(null, new object[] { c }))
+            });
         }
 
         private static object ResolveOrderedEnumerable<TService>(IComponentContext context)
