@@ -49,6 +49,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrderedRegistrationTests.Types.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

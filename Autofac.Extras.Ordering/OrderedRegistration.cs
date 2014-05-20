@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Autofac.Builder;
 using Autofac.Core;
-using Autofac.Features.Metadata;
 
 namespace Autofac.Extras.Ordering
 {
@@ -29,8 +26,7 @@ namespace Autofac.Extras.Ordering
         public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> OrderBy<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, IComparable order)
         {
-            registration.OrderBy(_ => order);
-            return registration;
+            return registration.OrderBy(_ => order);
         }
 
         /// <summary>
@@ -43,10 +39,9 @@ namespace Autofac.Extras.Ordering
         /// <param name="keySelector">Selects an ordering based on a component's properties</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> OrderBy<TLimit, TActivatorData, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, Func<TLimit, IComparable> keySelector)
+            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, Func<TLimit, IComparable> keySelector) 
         {
-            registration.WithMetadata<OrderingMetadata<TLimit>>(mc => mc.For(p => p.KeySelector, keySelector));
-            return registration;
+            return registration.WithMetadata(OrderedEnumerableParameter.OrderingMetadataKey, keySelector);
         }
 
         /// <summary>
@@ -59,10 +54,9 @@ namespace Autofac.Extras.Ordering
         /// <param name="registration">Registration to set parameter on.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> UsingOrdering<TLimit, TActivatorData, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration)
+            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration) where TActivatorData : ReflectionActivatorData
         {
-            registration.OnPreparing(ConfigureOrderedEnumerableParameter);
-            return registration;
+            return registration.WithParameter(new OrderedEnumerableParameter());
         }
 
         /// <summary>
@@ -72,65 +66,7 @@ namespace Autofac.Extras.Ordering
         /// <param name="registration">Registration to set parameter on.</param>
         public static void UseOrdering(this IComponentRegistration registration)
         {
-            registration.Preparing += (o, e) => ConfigureOrderedEnumerableParameter(e);
-        }
-
-        private static void ConfigureOrderedEnumerableParameter(PreparingEventArgs e)
-        {
-            e.Parameters = e.Parameters.Union(new[]
-            {
-                new ResolvedParameter(
-                    (p, c) => p.ParameterType.IsGenericType && p.ParameterType.GetGenericTypeDefinition() == typeof(IOrderedEnumerable<>),
-                    (p, c) => ResolveMethod.MakeGenericMethod(p.ParameterType.GetGenericArguments().Single())
-                                           .Invoke(null, new object[] { c }))
-            });
-        }
-
-        private static object ResolveOrderedEnumerable<TService>(IComponentContext context)
-        {
-            var registeredType = typeof(IEnumerable<>).MakeGenericType(
-                                 typeof(Meta<,>).MakeGenericType(typeof(TService), 
-                                                                 typeof(OrderingMetadata<TService>)));
-            var resolved = (Meta<TService, OrderingMetadata<TService>>[])context.Resolve(registeredType);
-            return new AlreadyOrderedEnumerable<TService>(
-                resolved.OrderBy(x => x.Metadata.KeySelector(x.Value))
-                        .Select(x => x.Value)
-                        .ToArray());
-        }
-
-        private static readonly MethodInfo ResolveMethod =
-            typeof(OrderedRegistration).GetMethod("ResolveOrderedEnumerable",
-                                                   BindingFlags.NonPublic |
-                                                   BindingFlags.Static);
-
-        private class AlreadyOrderedEnumerable<T> : IOrderedEnumerable<T>
-        {
-            public AlreadyOrderedEnumerable(IEnumerable<T> wrapped)
-            {
-                _wrapped = wrapped;
-            }
-
-            /// <summary>
-            /// This method would be invoked if OrderBy was called again on the collection (unlikely for this usage).
-            /// </summary>
-            public IOrderedEnumerable<T> CreateOrderedEnumerable<TKey>(Func<T, TKey> keySelector, IComparer<TKey> comparer, bool @descending)
-            {
-                return @descending
-                    ? _wrapped.OrderByDescending(keySelector, comparer)
-                    : _wrapped.OrderBy(keySelector, comparer);
-            }
-
-            public IEnumerator<T> GetEnumerator()
-            {
-                return _wrapped.GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-
-            private readonly IEnumerable<T> _wrapped;
+            registration.Preparing += (o, e) => e.Parameters = e.Parameters.Union(new[] { new OrderedEnumerableParameter() });
         }
     }
 }
