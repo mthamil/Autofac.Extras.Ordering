@@ -15,6 +15,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit.Tests", "Unit.Tests\Un
 EndProject
 Project("{E09DD79A-4488-4AB9-8D3F-A7EEE78BF432}") = "Autofac.Extras.Ordering.Package", "Autofac.Extras.Ordering.Package\Autofac.Extras.Ordering.Package.nuproj", "{1E1F9218-AB51-4CBA-AB52-7A3D8959B87D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{A5E7488F-E3B7-4D25-9F65-8008439FE913}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuBuild", "NuBuild", "{6F2DBA9A-E136-45DF-9FDB-1C6265E0A79C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "v1", "v1", "{301CC29D-A357-4B40-92D9-D187DFD02044}"
+	ProjectSection(SolutionItems) = preProject
+		.build\NuBuild\v1\NuBuild.Core.dll = .build\NuBuild\v1\NuBuild.Core.dll
+		.build\NuBuild\v1\NuBuild.MSBuild.Tasks.dll = .build\NuBuild\v1\NuBuild.MSBuild.Tasks.dll
+		.build\NuBuild\v1\NuBuild.targets = .build\NuBuild\v1\NuBuild.targets
+		.build\NuBuild\v1\NuBuild.tasks = .build\NuBuild\v1\NuBuild.tasks
+		.build\NuBuild\v1\NuGet.Core.dll = .build\NuBuild\v1\NuGet.Core.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,5 +48,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6F2DBA9A-E136-45DF-9FDB-1C6265E0A79C} = {A5E7488F-E3B7-4D25-9F65-8008439FE913}
+		{301CC29D-A357-4B40-92D9-D187DFD02044} = {6F2DBA9A-E136-45DF-9FDB-1C6265E0A79C}
 	EndGlobalSection
 EndGlobal

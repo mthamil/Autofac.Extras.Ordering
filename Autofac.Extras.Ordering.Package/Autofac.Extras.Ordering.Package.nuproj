@@ -23,5 +23,5 @@
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\NuBuild\v1\NuBuild.targets" />
+  <Import Project="$(ProjectDir)..\.build\NuBuild\v1\NuBuild.targets" />
 </Project>
