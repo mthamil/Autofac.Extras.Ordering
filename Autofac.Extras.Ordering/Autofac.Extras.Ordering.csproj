@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="OrderedEnumerableParameter.cs" />
     <Compile Include="OrderedRegistration.cs" />
+    <Compile Include="OrderedResolutionExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

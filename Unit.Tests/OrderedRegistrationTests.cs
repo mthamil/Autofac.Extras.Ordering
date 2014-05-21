@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Unit.Tests
 {
-    public partial class OrderedRegistrationTests
+    public class OrderedRegistrationTests
     {
         [Fact]
         public void Test_OrderBy_Constant_Per_Component()
