@@ -26,6 +26,27 @@ namespace Unit.Tests
             Assert.Equal(new[] { "dep 1", "dep 2", "dep 3" }, dependencies.Select(d => d.Name));
         }
 
+        [Fact]
+        public void Test_ResolveOrdered_With_Parameters()
+        {
+            // Arrange.
+            _builder.RegisterType<Dependency>().As<IDependency>()
+                    .OrderBy(2);
+            _builder.RegisterType<OtherDependency>().As<IDependency>()
+                    .OrderBy(1);
+            _builder.RegisterType<YetAnotherDependency>().As<IDependency>()
+                    .OrderBy(3);
+            var container = _builder.Build();
+
+            // Act.
+            var dependencies = container.ResolveOrdered<IDependency>(TypedParameter.From("test"));
+
+            // Assert.
+            Assert.Equal(new[] { typeof(OtherDependency), typeof(Dependency), typeof(YetAnotherDependency) }, 
+                         dependencies.Select(d => d.GetType()));
+            Assert.Equal("test", dependencies.Select(d => d.Name).Distinct().Single());
+        }
+
         private readonly ContainerBuilder _builder = new ContainerBuilder();
     }
 }

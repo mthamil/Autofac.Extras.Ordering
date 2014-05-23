@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac.Core;
 using Autofac.Features.Metadata;
 
 namespace Autofac.Extras.Ordering
@@ -15,13 +16,14 @@ namespace Autofac.Extras.Ordering
         /// Retrieves ordered services from the context.
         /// </summary>
         /// <typeparam name="TService">The type of service to which the results will be cast.</typeparam>
-        /// <param name="context">The context from which to resolve the services.</param>>
+        /// <param name="context">The context from which to resolve the services.</param>
+        /// <param name="parameters">The parameters.</param>
         /// <returns>The component instances that provide the service.</returns>
-        public static IOrderedEnumerable<TService> ResolveOrdered<TService>(this IComponentContext context)
+        public static IOrderedEnumerable<TService> ResolveOrdered<TService>(this IComponentContext context, params Parameter[] parameters)
         {
             var registeredType = typeof(IEnumerable<>).MakeGenericType(
                                  typeof(Meta<>).MakeGenericType(typeof(TService)));
-            var resolved = (Meta<TService>[])context.Resolve(registeredType);
+            var resolved = (Meta<TService>[])context.Resolve(registeredType, parameters);
             return new AlreadyOrderedEnumerable<TService>(
                 resolved.OrderBy(GetOrderFromMetadata)
                         .Select(t => t.Value)

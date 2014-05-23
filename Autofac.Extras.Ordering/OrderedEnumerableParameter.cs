@@ -15,7 +15,7 @@ namespace Autofac.Extras.Ordering
         public OrderedEnumerableParameter()
             : base((p, c) => p.ParameterType.IsGenericType && p.ParameterType.GetGenericTypeDefinition() == typeof(IOrderedEnumerable<>),
                    (p, c) => ResolveMethod.MakeGenericMethod(p.ParameterType.GetGenericArguments().Single())
-                                          .Invoke(null, new object[] { c }))
+                                          .Invoke(null, new object[] { c, EmptyParameters }))
         {
         }
 
@@ -25,5 +25,6 @@ namespace Autofac.Extras.Ordering
                                                           BindingFlags.Static);
 
         internal const string OrderingMetadataKey = "AutofacOrderingMetadataKey";
+        private static readonly Parameter[] EmptyParameters = new Parameter[0];
     }
 }

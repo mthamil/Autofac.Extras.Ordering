@@ -51,6 +51,16 @@ namespace Unit.Tests
         public string Name { get; private set; }
     }
 
+    class YetAnotherDependency : IDependency
+    {
+        public YetAnotherDependency(string name)
+        {
+            Name = name;
+        }
+
+        public string Name { get; private set; }
+    }
+
     class TestModule : Module
     {
         protected override void Load(ContainerBuilder builder)
