@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Autofac;
 using Autofac.Extras.Ordering;
+using Autofac.Features.Metadata;
 using Xunit;
 
 namespace Unit.Tests
@@ -11,9 +12,9 @@ namespace Unit.Tests
         public void Test_ResolveOrdered()
         {
             // Arrange.
-            _builder.Register(_ => new Dependency("dep 3")).As<IDependency>()
+            _builder.Register(_ => new Dependency("dep 2")).As<IDependency>()
                     .OrderBy(d => d.Name);
-            _builder.Register(_ => new OtherDependency("dep 2")).As<IDependency>()
+            _builder.Register(_ => new OtherDependency("dep 3")).As<IDependency>()
                     .OrderBy(d => d.Name);
             _builder.Register(_ => new Dependency("dep 1")).As<IDependency>()
                     .OrderBy(d => d.Name);
@@ -47,6 +48,34 @@ namespace Unit.Tests
             Assert.Equal("test", dependencies.Select(d => d.Name).Distinct().Single());
         }
 
+        [Fact]
+        public void Test_ResolveOrdered_With_Additional_Metadata()
+        {
+            // Arrange.
+            _builder.Register(_ => new Dependency("dep 2")).As<IDependency>()
+                    .OrderBy(x => x.Name)
+                    .WithMetadata<AdditionalMetadata>(m => m.For(p => p.Data, 1));
+            _builder.Register(_ => new OtherDependency("dep 3")).As<IDependency>()
+                    .OrderBy(x => x.Name)
+                    .WithMetadata<AdditionalMetadata>(m => m.For(p => p.Data, 2));
+            _builder.Register(_ => new Dependency("dep 1")).As<IDependency>()
+                    .OrderBy(x => x.Name)
+                    .WithMetadata<AdditionalMetadata>(m => m.For(p => p.Data, 3));
+            var container = _builder.Build();
+
+            // Act.
+            var dependencies = container.ResolveOrdered<Meta<IDependency, AdditionalMetadata>>();
+
+            // Assert.
+            Assert.Equal(new[] { "dep 1", "dep 2", "dep 3" }, dependencies.Select(d => d.Value.Name));
+            Assert.Equal(new[] { 3, 1, 2 }, dependencies.Select(d => d.Metadata.Data));
+        }
+
         private readonly ContainerBuilder _builder = new ContainerBuilder();
+
+        private class AdditionalMetadata
+        {
+            public int Data { get; set; }
+        }
     }
 }

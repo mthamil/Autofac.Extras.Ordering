@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using Autofac.Core;
+using Autofac.Extras.Ordering.Utilities;
 
 namespace Autofac.Extras.Ordering
 {
@@ -13,7 +14,7 @@ namespace Autofac.Extras.Ordering
         /// Initializes a new <see cref="OrderedEnumerableParameter"/>.
         /// </summary>
         public OrderedEnumerableParameter()
-            : base((p, c) => p.ParameterType.IsGenericType && p.ParameterType.GetGenericTypeDefinition() == typeof(IOrderedEnumerable<>),
+            : base((p, c) => p.ParameterType.IsInstanceOfGenericType(typeof(IOrderedEnumerable<>)),
                    (p, c) => ResolveMethod.MakeGenericMethod(p.ParameterType.GetGenericArguments().Single())
                                           .Invoke(null, new object[] { c, EmptyParameters }))
         {

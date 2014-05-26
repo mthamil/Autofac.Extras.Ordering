@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Core;
+using Autofac.Extras.Ordering.Utilities;
 using Autofac.Features.Metadata;
 
 namespace Autofac.Extras.Ordering
@@ -33,7 +34,22 @@ namespace Autofac.Extras.Ordering
         private static object GetOrderFromMetadata<TService>(Meta<TService> instance)
         {
             var orderingFunction = instance.Metadata.Single(m => m.Key == OrderedEnumerableParameter.OrderingMetadataKey);
-            return ((Delegate)orderingFunction.Value).DynamicInvoke(instance.Value);
+            return ((Delegate)orderingFunction.Value).DynamicInvoke(UnwrapValue(instance.Value));
+        }
+
+        private static object UnwrapValue(object value)
+        {
+            var type = value.GetType();
+            if (!IsMetadata(type))
+                return value;
+
+            return UnwrapValue(type.GetProperty("Value").GetValue(value)); // Unwrap a layer of metadata.
+        }
+
+        private static bool IsMetadata(Type type)
+        {
+            return type.IsInstanceOfGenericType(typeof(Meta<>)) ||
+                   type.IsInstanceOfGenericType(typeof(Meta<,>));
         }
 
         /// <summary>
