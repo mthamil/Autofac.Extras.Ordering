@@ -33,8 +33,8 @@ namespace Autofac.Extras.Ordering
 
         private static object GetOrderFromMetadata<TService>(Meta<TService> instance)
         {
-            var orderingFunction = instance.Metadata.Single(m => m.Key == OrderedEnumerableParameter.OrderingMetadataKey);
-            return ((Delegate)orderingFunction.Value).DynamicInvoke(UnwrapValue(instance.Value));
+            var orderingFunction = instance.Metadata[OrderedEnumerableParameter.OrderingMetadataKey];
+            return ((Delegate)orderingFunction).DynamicInvoke(UnwrapValue(instance.Value));
         }
 
         private static object UnwrapValue(object value)
