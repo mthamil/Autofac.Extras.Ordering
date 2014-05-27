@@ -38,6 +38,11 @@ namespace Unit.Tests
             Name = name;
         }
 
+        public Dependency()
+        {
+            Name = GetType().Name;
+        }
+
         public string Name { get; private set; }
     }
 
@@ -48,6 +53,11 @@ namespace Unit.Tests
             Name = name;
         }
 
+        public OtherDependency()
+        {
+            Name = GetType().Name;
+        }
+
         public string Name { get; private set; }
     }
 
@@ -56,6 +66,11 @@ namespace Unit.Tests
         public YetAnotherDependency(string name)
         {
             Name = name;
+        }
+
+        public YetAnotherDependency()
+        {
+            Name = GetType().Name;
         }
 
         public string Name { get; private set; }

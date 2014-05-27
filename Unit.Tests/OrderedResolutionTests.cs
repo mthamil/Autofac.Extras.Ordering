@@ -71,6 +71,28 @@ namespace Unit.Tests
             Assert.Equal(new[] { 3, 1, 2 }, dependencies.Select(d => d.Metadata.Data));
         }
 
+        [Fact]
+        public void Test_ResolveOrdered_For_Scanned_Types()
+        {
+            // Arrange.
+            _builder.RegisterTypes(new[]
+                    {
+                        typeof(YetAnotherDependency),
+                        typeof(Dependency),
+                        typeof(OtherDependency)
+                    })
+                    .As<IDependency>()
+                    .OrderByRegistration();
+            var container = _builder.Build();
+
+            // Act.
+            var dependencies = container.ResolveOrdered<IDependency>();
+
+            // Assert.
+            Assert.Equal(new[] { typeof(YetAnotherDependency), typeof(Dependency), typeof(OtherDependency) },
+                         dependencies.Select(d => d.GetType()));
+        }
+
         private readonly ContainerBuilder _builder = new ContainerBuilder();
 
         private class AdditionalMetadata

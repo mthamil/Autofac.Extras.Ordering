@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac.Builder;
 using Autofac.Core;
+using Autofac.Features.Scanning;
 
 namespace Autofac.Extras.Ordering
 {
@@ -12,7 +13,7 @@ namespace Autofac.Extras.Ordering
     /// relationship type is supported. Declaring a dependency of type <see cref="IOrderedEnumerable{TElement}"/> 
     /// with this extension allows for a deterministic order.
     /// </summary>
-    public static class OrderedRegistration
+    public static class OrderedRegistrationExtensions
     {
         /// <summary>
         /// Configures an explicit order that a service should be resolved in.
@@ -42,6 +43,22 @@ namespace Autofac.Extras.Ordering
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, Func<TLimit, IComparable> keySelector) 
         {
             return registration.WithMetadata(OrderedEnumerableParameter.OrderingMetadataKey, keySelector);
+        }
+
+        /// <summary>
+        /// Configures that services will be resolved in the order in which they are registered.
+        /// </summary>
+        /// <typeparam name="TLimit">Registration limit type.</typeparam>
+        /// <typeparam name="TRegistrationStyle">Registration style.</typeparam>
+        /// <param name="registration">Registration to set parameter on.</param>
+        /// <returns>A registration builder allowing further configuration of the component.</returns>
+        public static IRegistrationBuilder<TLimit, ScanningActivatorData, TRegistrationStyle> OrderByRegistration<TLimit, TRegistrationStyle>(
+            this IRegistrationBuilder<TLimit, ScanningActivatorData, TRegistrationStyle> registration)
+        {
+            int order = 1;
+            registration.ActivatorData.ConfigurationActions.Add((type, builder) => 
+                builder.OrderBy(order++));
+            return registration;
         }
 
         /// <summary>

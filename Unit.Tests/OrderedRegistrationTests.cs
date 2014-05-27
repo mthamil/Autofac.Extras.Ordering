@@ -8,7 +8,7 @@ namespace Unit.Tests
     public class OrderedRegistrationTests
     {
         [Fact]
-        public void Test_OrderBy_Constant_Per_Component()
+        public void Test_OrderBy_Explicit_Per_Component()
         {
             // Arrange.
             _builder.RegisterType<TestComponent>()
@@ -29,7 +29,7 @@ namespace Unit.Tests
         }
 
         [Fact]
-        public void Test_OrderBy_Constant_Per_Component_As_Interface()
+        public void Test_OrderBy_Explicit_Per_Component_As_Interface()
         {
             // Arrange.
             _builder.RegisterType<TestComponent_With_InterfaceDependency>()
@@ -92,7 +92,7 @@ namespace Unit.Tests
         }
 
         [Fact]
-        public void Test_OrderBy_Constant_Per_Module()
+        public void Test_OrderBy_Explicit_Per_Module()
         {
             // Arrange.
             _builder.RegisterModule<TestModule>();
@@ -117,6 +117,32 @@ namespace Unit.Tests
 
             // Assert.
             Assert.Equal(new[] { "dep 1", "dep 2", "dep 3" }, component.Dependencies.Select(d => d.Name));
+        }
+
+        [Fact]
+        public void Test_OrderByRegistration_For_Scanning()
+        {
+            // Arrange.
+            _builder.RegisterType<TestComponent_With_InterfaceDependency>()
+                    .UsingOrdering();
+
+            _builder.RegisterTypes(new[]
+                    {
+                        typeof(OtherDependency),
+                        typeof(Dependency),
+                        typeof(YetAnotherDependency)
+                    })
+                    .As<IDependency>()
+                    .OrderByRegistration();
+
+            var container = _builder.Build();
+
+            // Act.
+            var component = container.Resolve<TestComponent_With_InterfaceDependency>();
+
+            // Assert.
+            Assert.Equal(new[] { typeof(OtherDependency), typeof(Dependency), typeof(YetAnotherDependency) },
+                         component.Dependencies.Select(d => d.GetType()));
         }
 
         private readonly ContainerBuilder _builder = new ContainerBuilder();
