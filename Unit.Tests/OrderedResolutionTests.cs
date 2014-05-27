@@ -93,6 +93,52 @@ namespace Unit.Tests
                          dependencies.Select(d => d.GetType()));
         }
 
+        [Fact]
+        public void Test_Resolve_OrderedEnumerable()
+        {
+            // Arrange.
+            _builder.Register(_ => new Dependency("dep 2")).As<IDependency>()
+                    .OrderBy(d => d.Name);
+            _builder.Register(_ => new OtherDependency("dep 3")).As<IDependency>()
+                    .OrderBy(d => d.Name);
+            _builder.Register(_ => new Dependency("dep 1")).As<IDependency>()
+                    .OrderBy(d => d.Name);
+
+            _builder.RegisterSource(new OrderedRegistrationSource());
+            var container = _builder.Build();
+
+            // Act.
+            var dependencies = container.Resolve<IOrderedEnumerable<IDependency>>();
+
+            // Assert.
+            Assert.Equal(new[] { "dep 1", "dep 2", "dep 3" }, dependencies.Select(d => d.Name));
+        }
+
+        [Fact]
+        public void Test_Resolve_OrderedEnumerable_With_Additional_Metadata()
+        {
+            // Arrange.
+            _builder.Register(_ => new Dependency("dep 2")).As<IDependency>()
+                    .OrderBy(x => x.Name)
+                    .WithMetadata<AdditionalMetadata>(m => m.For(p => p.Data, 1));
+            _builder.Register(_ => new OtherDependency("dep 3")).As<IDependency>()
+                    .OrderBy(x => x.Name)
+                    .WithMetadata<AdditionalMetadata>(m => m.For(p => p.Data, 2));
+            _builder.Register(_ => new Dependency("dep 1")).As<IDependency>()
+                    .OrderBy(x => x.Name)
+                    .WithMetadata<AdditionalMetadata>(m => m.For(p => p.Data, 3));
+
+            _builder.RegisterSource(new OrderedRegistrationSource());
+            var container = _builder.Build();
+
+            // Act.
+            var dependencies = container.Resolve<IOrderedEnumerable<Meta<IDependency, AdditionalMetadata>>>();
+
+            // Assert.
+            Assert.Equal(new[] { "dep 1", "dep 2", "dep 3" }, dependencies.Select(d => d.Value.Name));
+            Assert.Equal(new[] { 3, 1, 2 }, dependencies.Select(d => d.Metadata.Data));
+        }
+
         private readonly ContainerBuilder _builder = new ContainerBuilder();
 
         private class AdditionalMetadata

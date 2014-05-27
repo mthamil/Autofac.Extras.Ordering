@@ -70,6 +70,7 @@ namespace Autofac.Extras.Ordering
         /// <typeparam name="TRegistrationStyle">Registration style.</typeparam>
         /// <param name="registration">Registration to set parameter on.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
+        [Obsolete("Use OrderedRegistrationSource.")]
         public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> UsingOrdering<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration) where TActivatorData : ReflectionActivatorData
         {
@@ -81,6 +82,7 @@ namespace Autofac.Extras.Ordering
         /// of a parameter of type <see cref="IOrderedEnumerable{TElement}"/>.
         /// </summary>
         /// <param name="registration">Registration to set parameter on.</param>
+        [Obsolete("Use OrderedRegistrationSource.")]
         public static void UseOrdering(this IComponentRegistration registration)
         {
             registration.Preparing += (o, e) => e.Parameters = e.Parameters.Union(new[] { new OrderedEnumerableParameter() });

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using Autofac.Core;
 using Autofac.Extras.Ordering;
 
 namespace Unit.Tests
@@ -89,11 +88,6 @@ namespace Unit.Tests
             builder.Register(_ => new Dependency("dep 2"))
                     .OrderBy(3);
         }
-
-        protected override void AttachToComponentRegistration(IComponentRegistry componentRegistry, IComponentRegistration registration)
-        {
-            registration.UseOrdering();
-        }
     }
 
     class TestModule_With_InterfaceDependency : Module
@@ -108,11 +102,6 @@ namespace Unit.Tests
                     .OrderBy(d => d.Name);
             builder.Register(_ => new Dependency("dep 2")).As<IDependency>()
                     .OrderBy(d => d.Name);
-        }
-
-        protected override void AttachToComponentRegistration(IComponentRegistry componentRegistry, IComponentRegistration registration)
-        {
-            registration.UseOrdering();
         }
     }
 }
