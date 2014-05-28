@@ -56,6 +56,14 @@ namespace Autofac.Extras.Ordering
         /// <remarks>Always returns false.</remarks>
         public bool IsAdapterForIndividualComponents { get { return false; } }
 
+        /// <summary>
+        /// A description of the registration source.
+        /// </summary>
+        public override string ToString()
+        {
+            return OrderedRegistrationSourceResources.OrderedRegistrationSourceDescription;
+        }
+
         private static readonly MethodInfo ResolveMethod =
             typeof(OrderedResolutionExtensions).GetMethod("ResolveOrdered",
                                                           BindingFlags.Public |
