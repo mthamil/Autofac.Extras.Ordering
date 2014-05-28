@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using Autofac.Core;
 using Autofac.Extras.Ordering.Utilities;
@@ -8,6 +9,7 @@ namespace Autofac.Extras.Ordering
     /// <summary>
     /// Parameter that can resolve values of type <see cref="IOrderedEnumerable{TElement}"/>.
     /// </summary>
+    [Obsolete("Use OrderedRegistrationSource.")]
     public class OrderedEnumerableParameter : ResolvedParameter
     {
         /// <summary>
