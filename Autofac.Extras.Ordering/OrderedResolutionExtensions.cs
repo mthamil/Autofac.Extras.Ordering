@@ -14,6 +14,18 @@ namespace Autofac.Extras.Ordering
     public static class OrderedResolutionExtensions
     {
         /// <summary>
+        /// Returns an <see cref="IEnumerable{T}"/> which is already assumed to be ordered
+        /// as an <see cref="IOrderedEnumerable{T}"/>.
+        /// </summary>
+        /// <typeparam name="TService">The type of elements</typeparam>
+        /// <param name="alreadyOrdered">An already ordered sequence of elements</param>
+        /// <returns>The sequence as an <see cref="IOrderedEnumerable{T}"/></returns>
+        public static IOrderedEnumerable<TService> AsOrdered<TService>(this IEnumerable<TService> alreadyOrdered)
+        {
+            return new AlreadyOrderedEnumerable<TService>(alreadyOrdered);
+        }
+
+        /// <summary>
         /// Retrieves ordered services from the context.
         /// </summary>
         /// <typeparam name="TService">The type of service to which the results will be cast.</typeparam>
@@ -37,11 +49,11 @@ namespace Autofac.Extras.Ordering
             var registeredType = typeof(IEnumerable<>).MakeGenericType(
                                  typeof(Meta<>).MakeGenericType(typeof(TService)));
             var resolved = (Meta<TService>[])context.Resolve(registeredType, parameters);
-            return new AlreadyOrderedEnumerable<TService>(
-                resolved.Where(HasOrderingMetadata)
-                        .OrderBy(GetOrderFromMetadata)
-                        .Select(t => t.Value)
-                        .ToArray());
+            return resolved.Where(HasOrderingMetadata)
+                           .OrderBy(GetOrderFromMetadata)
+                           .Select(t => t.Value)
+                           .ToArray()
+                           .AsOrdered();
         }
 
         private static bool HasOrderingMetadata<TService>(Meta<TService> instance)
@@ -73,7 +85,7 @@ namespace Autofac.Extras.Ordering
         /// <summary>
         /// A simple wrapper that presents an <see cref="IEnumerable{T}"/> as an assumed-to-already-be-ordered collection.
         /// </summary>
-        private class AlreadyOrderedEnumerable<T> : IOrderedEnumerable<T>
+        private sealed class AlreadyOrderedEnumerable<T> : IOrderedEnumerable<T>
         {
             public AlreadyOrderedEnumerable(IEnumerable<T> wrapped)
             {
