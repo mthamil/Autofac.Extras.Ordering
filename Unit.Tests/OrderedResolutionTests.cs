@@ -144,6 +144,26 @@ namespace Unit.Tests
         }
 
         [Fact]
+        public void Test_Resolve_OrderedEnumerable_Subset_Of_Types()
+        {
+            // Arrange.
+            _builder.Register(_ => new Dependency("dep 3")).As<IDependency>()
+                    .OrderBy(d => d.Name);
+            _builder.Register(_ => new OtherDependency("dep 1")).As<IDependency>();
+            _builder.Register(_ => new Dependency("dep 2")).As<IDependency>()
+                    .OrderBy(d => d.Name);
+
+            _builder.RegisterSource(new OrderedRegistrationSource());
+            var container = _builder.Build();
+
+            // Act.
+            var dependencies = container.Resolve<IOrderedEnumerable<IDependency>>();
+
+            // Assert.
+            Assert.Equal(new[] { "dep 2", "dep 3" }, dependencies.Select(d => d.Name));
+        }
+
+        [Fact]
         public void Test_Resolve_OrderedEnumerable_With_Additional_Metadata()
         {
             // Arrange.

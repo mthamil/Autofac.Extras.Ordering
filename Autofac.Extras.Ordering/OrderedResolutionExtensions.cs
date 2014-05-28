@@ -26,9 +26,15 @@ namespace Autofac.Extras.Ordering
                                  typeof(Meta<>).MakeGenericType(typeof(TService)));
             var resolved = (Meta<TService>[])context.Resolve(registeredType, parameters);
             return new AlreadyOrderedEnumerable<TService>(
-                resolved.OrderBy(GetOrderFromMetadata)
+                resolved.Where(HasOrderingMetadata)
+                        .OrderBy(GetOrderFromMetadata)
                         .Select(t => t.Value)
                         .ToArray());
+        }
+
+        private static bool HasOrderingMetadata<TService>(Meta<TService> instance)
+        {
+            return instance.Metadata.ContainsKey(OrderedEnumerableParameter.OrderingMetadataKey);
         }
 
         private static object GetOrderFromMetadata<TService>(Meta<TService> instance)
