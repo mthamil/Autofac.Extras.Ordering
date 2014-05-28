@@ -42,7 +42,7 @@ namespace Autofac.Extras.Ordering
         public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> OrderBy<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, Func<TLimit, IComparable> keySelector) 
         {
-            return registration.WithMetadata(OrderedEnumerableParameter.OrderingMetadataKey, keySelector);
+            return registration.WithMetadata(OrderedRegistrationSource.OrderingMetadataKey, keySelector);
         }
 
         /// <summary>

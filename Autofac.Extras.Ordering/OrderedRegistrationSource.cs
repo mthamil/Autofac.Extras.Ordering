@@ -68,5 +68,7 @@ namespace Autofac.Extras.Ordering
             typeof(OrderedResolutionExtensions).GetMethod("ResolveOrdered",
                                                           BindingFlags.Public |
                                                           BindingFlags.Static);
+
+        internal const string OrderingMetadataKey = "AutofacOrderingMetadataKey";
     }
 }

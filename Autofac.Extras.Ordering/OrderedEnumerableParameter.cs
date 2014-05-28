@@ -25,7 +25,6 @@ namespace Autofac.Extras.Ordering
                                                           BindingFlags.Public |
                                                           BindingFlags.Static);
 
-        internal const string OrderingMetadataKey = "AutofacOrderingMetadataKey";
         private static readonly Parameter[] EmptyParameters = new Parameter[0];
     }
 }

@@ -34,12 +34,12 @@ namespace Autofac.Extras.Ordering
 
         private static bool HasOrderingMetadata<TService>(Meta<TService> instance)
         {
-            return instance.Metadata.ContainsKey(OrderedEnumerableParameter.OrderingMetadataKey);
+            return instance.Metadata.ContainsKey(OrderedRegistrationSource.OrderingMetadataKey);
         }
 
         private static object GetOrderFromMetadata<TService>(Meta<TService> instance)
         {
-            var orderingFunction = instance.Metadata[OrderedEnumerableParameter.OrderingMetadataKey];
+            var orderingFunction = instance.Metadata[OrderedRegistrationSource.OrderingMetadataKey];
             return ((Delegate)orderingFunction).DynamicInvoke(UnwrapValue(instance.Value));
         }
 
