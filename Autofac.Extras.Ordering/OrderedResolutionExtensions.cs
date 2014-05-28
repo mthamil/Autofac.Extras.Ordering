@@ -22,6 +22,18 @@ namespace Autofac.Extras.Ordering
         /// <returns>The component instances that provide the service.</returns>
         public static IOrderedEnumerable<TService> ResolveOrdered<TService>(this IComponentContext context, params Parameter[] parameters)
         {
+            return context.ResolveOrdered<TService>(parameters.AsEnumerable());
+        }
+
+        /// <summary>
+        /// Retrieves ordered services from the context.
+        /// </summary>
+        /// <typeparam name="TService">The type of service to which the results will be cast.</typeparam>
+        /// <param name="context">The context from which to resolve the services.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>The component instances that provide the service.</returns>
+        public static IOrderedEnumerable<TService> ResolveOrdered<TService>(this IComponentContext context, IEnumerable<Parameter> parameters)
+        {
             var registeredType = typeof(IEnumerable<>).MakeGenericType(
                                  typeof(Meta<>).MakeGenericType(typeof(TService)));
             var resolved = (Meta<TService>[])context.Resolve(registeredType, parameters);

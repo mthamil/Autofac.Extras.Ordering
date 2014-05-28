@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Autofac.Builder;
 using Autofac.Core;
-using Autofac.Core.Activators.Delegate;
-using Autofac.Core.Lifetime;
-using Autofac.Core.Registration;
 using Autofac.Extras.Ordering.Utilities;
 
 namespace Autofac.Extras.Ordering
@@ -31,18 +29,12 @@ namespace Autofac.Extras.Ordering
                 if (serviceType.IsInstanceOfGenericType(typeof(IOrderedEnumerable<>)))
                 {
                     var dependencyType = serviceType.GetGenericArguments().Single();
-                    var registration = new ComponentRegistration(
-                        Guid.NewGuid(),
-                        new DelegateActivator(serviceType, (c, ps) => 
-                            ResolveMethod.MakeGenericMethod(dependencyType)
-                                         .Invoke(null, new object[] { c, ps })),
-                        new CurrentScopeLifetime(),
-                        InstanceSharing.None,
-                        InstanceOwnership.ExternallyOwned,
-                        new[] { service },
-                        new Dictionary<string, object>());
 
-                    return new IComponentRegistration[] { registration };
+                    var registration = (IComponentRegistration)CreateRegistrationMethod
+                        .MakeGenericMethod(dependencyType)
+                        .Invoke(null, new object[0]);
+
+                    return new[] { registration };
                 }
             }
 
@@ -64,10 +56,21 @@ namespace Autofac.Extras.Ordering
             return OrderedRegistrationSourceResources.OrderedRegistrationSourceDescription;
         }
 
-        private static readonly MethodInfo ResolveMethod =
-            typeof(OrderedResolutionExtensions).GetMethod("ResolveOrdered",
-                                                          BindingFlags.Public |
-                                                          BindingFlags.Static);
+        private static IComponentRegistration CreateOrderedRegistration<TService>()
+        {
+            var registration = RegistrationBuilder
+                .ForDelegate((c, ps) => 
+                    c.ResolveOrdered<TService>(ps))
+                .ExternallyOwned()
+                .CreateRegistration();
+
+            return registration;
+        }
+
+        private static readonly MethodInfo CreateRegistrationMethod =
+            typeof(OrderedRegistrationSource).GetMethod("CreateOrderedRegistration",
+                                                        BindingFlags.NonPublic |
+                                                        BindingFlags.Static);
 
         internal const string OrderingMetadataKey = "AutofacOrderingMetadataKey";
     }
