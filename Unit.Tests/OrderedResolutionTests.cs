@@ -9,6 +9,20 @@ namespace Unit.Tests
     public class OrderedResolutionTests
     {
         [Fact]
+        public void Test_ResolveOrdered_Empty()
+        {
+            // Arrange.
+            var container = _builder.Build();
+
+            // Act.
+            var dependencies = container.ResolveOrdered<IDependency>();
+
+            // Assert.
+            Assert.NotNull(dependencies);
+            Assert.Empty(dependencies);
+        }
+
+        [Fact]
         public void Test_ResolveOrdered()
         {
             // Arrange.
@@ -91,6 +105,21 @@ namespace Unit.Tests
             // Assert.
             Assert.Equal(new[] { typeof(YetAnotherDependency), typeof(Dependency), typeof(OtherDependency) },
                          dependencies.Select(d => d.GetType()));
+        }
+
+        [Fact]
+        public void Test_Resolve_OrderedEnumerable_Empty()
+        {
+            // Arrange.
+            _builder.RegisterSource(new OrderedRegistrationSource());
+            var container = _builder.Build();
+
+            // Act.
+            var dependencies = container.Resolve<IOrderedEnumerable<IDependency>>();
+
+            // Assert.
+            Assert.NotNull(dependencies);
+            Assert.Empty(dependencies);
         }
 
         [Fact]
