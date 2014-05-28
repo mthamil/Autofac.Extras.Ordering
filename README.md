@@ -33,14 +33,13 @@ First, declare a constructor argument of type IOrderedEnumerable&lt;TDependency&
     }
 ```
 
-Then, register that component using the extension method, .UsingOrdering():
+Then, register that component as usual:
 
 ```C#
-    builder.RegisterType<SomeComponent>()
-           .UsingOrdering();
+    builder.RegisterType<SomeComponent>();
 ```
 
-Finally, register dependencies with the order in which they should be provided using the extension method .OrderBy().
+Next, register dependencies with the order in which they should be provided using the extension method .OrderBy().
 
 A constant order may be used:
 ```C#
@@ -58,6 +57,11 @@ Or, a function may be provided that determines the order based on a dependency's
 
     builder.Register(_ => new Dependency("2"))
            .OrderBy(d => d.Name);
+```
+
+Finally, add the OrderedRegistrationSource to enable support for IOrderedEnumerable&lt;T&gt;:
+```C#
+    builder.RegisterSource(new OrderedRegistrationSource());
 ```
 
 When SomeComponent is resolved, it will be supplied with Dependencies sorted by the order each was given.
