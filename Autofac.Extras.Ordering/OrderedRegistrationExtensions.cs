@@ -51,11 +51,12 @@ namespace Autofac.Extras.Ordering
         /// <typeparam name="TLimit">Registration limit type.</typeparam>
         /// <typeparam name="TRegistrationStyle">Registration style.</typeparam>
         /// <param name="registration">Registration to set parameter on.</param>
+        /// <param name="starting">An optional starting order</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<TLimit, ScanningActivatorData, TRegistrationStyle> OrderByRegistration<TLimit, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, ScanningActivatorData, TRegistrationStyle> registration)
+            this IRegistrationBuilder<TLimit, ScanningActivatorData, TRegistrationStyle> registration, int starting = 1)
         {
-            int order = 1;
+            int order = starting;
             registration.ActivatorData.ConfigurationActions.Add((type, builder) => 
                 builder.OrderBy(order++));
             return registration;

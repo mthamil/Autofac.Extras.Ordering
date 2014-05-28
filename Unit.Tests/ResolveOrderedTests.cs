@@ -6,10 +6,10 @@ using Xunit;
 
 namespace Unit.Tests
 {
-    public class OrderedResolutionTests
+    public class ResolveOrderedTests
     {
         [Fact]
-        public void Test_ResolveOrdered_Empty()
+        public void Test_Empty()
         {
             // Arrange.
             var container = _builder.Build();
@@ -42,7 +42,7 @@ namespace Unit.Tests
         }
 
         [Fact]
-        public void Test_ResolveOrdered_With_Parameters()
+        public void Test_With_Parameters()
         {
             // Arrange.
             _builder.RegisterType<Dependency>().As<IDependency>()
@@ -63,7 +63,7 @@ namespace Unit.Tests
         }
 
         [Fact]
-        public void Test_ResolveOrdered_With_Additional_Metadata()
+        public void Test_With_Additional_Metadata()
         {
             // Arrange.
             _builder.Register(_ => new Dependency("dep 2")).As<IDependency>()
@@ -86,7 +86,7 @@ namespace Unit.Tests
         }
 
         [Fact]
-        public void Test_ResolveOrdered_For_Scanned_Types()
+        public void Test_For_Scanned_Types()
         {
             // Arrange.
             _builder.RegisterTypes(new[]
@@ -105,87 +105,6 @@ namespace Unit.Tests
             // Assert.
             Assert.Equal(new[] { typeof(YetAnotherDependency), typeof(Dependency), typeof(OtherDependency) },
                          dependencies.Select(d => d.GetType()));
-        }
-
-        [Fact]
-        public void Test_Resolve_OrderedEnumerable_Empty()
-        {
-            // Arrange.
-            _builder.RegisterSource(new OrderedRegistrationSource());
-            var container = _builder.Build();
-
-            // Act.
-            var dependencies = container.Resolve<IOrderedEnumerable<IDependency>>();
-
-            // Assert.
-            Assert.NotNull(dependencies);
-            Assert.Empty(dependencies);
-        }
-
-        [Fact]
-        public void Test_Resolve_OrderedEnumerable()
-        {
-            // Arrange.
-            _builder.Register(_ => new Dependency("dep 2")).As<IDependency>()
-                    .OrderBy(d => d.Name);
-            _builder.Register(_ => new OtherDependency("dep 3")).As<IDependency>()
-                    .OrderBy(d => d.Name);
-            _builder.Register(_ => new Dependency("dep 1")).As<IDependency>()
-                    .OrderBy(d => d.Name);
-
-            _builder.RegisterSource(new OrderedRegistrationSource());
-            var container = _builder.Build();
-
-            // Act.
-            var dependencies = container.Resolve<IOrderedEnumerable<IDependency>>();
-
-            // Assert.
-            Assert.Equal(new[] { "dep 1", "dep 2", "dep 3" }, dependencies.Select(d => d.Name));
-        }
-
-        [Fact]
-        public void Test_Resolve_OrderedEnumerable_Subset_Of_Types()
-        {
-            // Arrange.
-            _builder.Register(_ => new Dependency("dep 3")).As<IDependency>()
-                    .OrderBy(d => d.Name);
-            _builder.Register(_ => new OtherDependency("dep 1")).As<IDependency>();
-            _builder.Register(_ => new Dependency("dep 2")).As<IDependency>()
-                    .OrderBy(d => d.Name);
-
-            _builder.RegisterSource(new OrderedRegistrationSource());
-            var container = _builder.Build();
-
-            // Act.
-            var dependencies = container.Resolve<IOrderedEnumerable<IDependency>>();
-
-            // Assert.
-            Assert.Equal(new[] { "dep 2", "dep 3" }, dependencies.Select(d => d.Name));
-        }
-
-        [Fact]
-        public void Test_Resolve_OrderedEnumerable_With_Additional_Metadata()
-        {
-            // Arrange.
-            _builder.Register(_ => new Dependency("dep 2")).As<IDependency>()
-                    .OrderBy(x => x.Name)
-                    .WithMetadata<AdditionalMetadata>(m => m.For(p => p.Data, 1));
-            _builder.Register(_ => new OtherDependency("dep 3")).As<IDependency>()
-                    .OrderBy(x => x.Name)
-                    .WithMetadata<AdditionalMetadata>(m => m.For(p => p.Data, 2));
-            _builder.Register(_ => new Dependency("dep 1")).As<IDependency>()
-                    .OrderBy(x => x.Name)
-                    .WithMetadata<AdditionalMetadata>(m => m.For(p => p.Data, 3));
-
-            _builder.RegisterSource(new OrderedRegistrationSource());
-            var container = _builder.Build();
-
-            // Act.
-            var dependencies = container.Resolve<IOrderedEnumerable<Meta<IDependency, AdditionalMetadata>>>();
-
-            // Assert.
-            Assert.Equal(new[] { "dep 1", "dep 2", "dep 3" }, dependencies.Select(d => d.Value.Name));
-            Assert.Equal(new[] { 3, 1, 2 }, dependencies.Select(d => d.Metadata.Data));
         }
 
         private readonly ContainerBuilder _builder = new ContainerBuilder();

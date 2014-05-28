@@ -46,10 +46,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OrderedRegistrationTests.cs" />
-    <Compile Include="OrderedResolutionTests.cs" />
+    <Compile Include="ResolveOrderedTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ResolveOrderedEnumerableTests.cs" />
     <Compile Include="TestTypes.cs" />
     <None Include="packages.config" />
   </ItemGroup>
