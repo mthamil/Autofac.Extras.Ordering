@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Builder;
-using Autofac.Core;
 using Autofac.Features.Scanning;
 
 namespace Autofac.Extras.Ordering
@@ -60,33 +59,6 @@ namespace Autofac.Extras.Ordering
             registration.ActivatorData.ConfigurationActions.Add((type, builder) => 
                 builder.OrderBy(order++));
             return registration;
-        }
-
-        /// <summary>
-        /// Specifies that a component depends on an ordered collection of services. This is declared by use
-        /// of a parameter of type <see cref="IOrderedEnumerable{TElement}"/>.
-        /// </summary>
-        /// <typeparam name="TLimit">Registration limit type.</typeparam>
-        /// <typeparam name="TActivatorData">Activator data type.</typeparam>
-        /// <typeparam name="TRegistrationStyle">Registration style.</typeparam>
-        /// <param name="registration">Registration to set parameter on.</param>
-        /// <returns>A registration builder allowing further configuration of the component.</returns>
-        [Obsolete("Use OrderedRegistrationSource.")]
-        public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> UsingOrdering<TLimit, TActivatorData, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration) where TActivatorData : ReflectionActivatorData
-        {
-            return registration.WithParameter(new OrderedEnumerableParameter());
-        }
-
-        /// <summary>
-        /// Specifies that a component depends on an ordered collection of services. This is declared by use
-        /// of a parameter of type <see cref="IOrderedEnumerable{TElement}"/>.
-        /// </summary>
-        /// <param name="registration">Registration to set parameter on.</param>
-        [Obsolete("Use OrderedRegistrationSource.")]
-        public static void UseOrdering(this IComponentRegistration registration)
-        {
-            registration.Preparing += (o, e) => e.Parameters = e.Parameters.Union(new[] { new OrderedEnumerableParameter() });
         }
     }
 }
