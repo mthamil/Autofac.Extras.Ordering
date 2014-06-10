@@ -149,6 +149,20 @@ namespace Unit.Tests
                 typeof(OtherDependency)
             }, dependencies.Select(d => d.GetType()));
         }
+        
+        [Fact]
+        public void Test_When_IOrderedEnumerable_Explicitly_Registered()
+        {
+            // Arrange.
+            _builder.Register(_ => new[] { 2, 1, 5, 6, 3 }.OrderBy(x => x));
+            var container = _builder.Build();
+
+            // Act.
+            var resolved = container.Resolve<IOrderedEnumerable<int>>();
+
+            // Assert.
+            Assert.Equal(new[] { 1, 2, 3, 5, 6 }, resolved);
+        }
 
         private readonly ContainerBuilder _builder = new ContainerBuilder();
 
