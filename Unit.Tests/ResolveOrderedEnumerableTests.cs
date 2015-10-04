@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using Autofac.Extras.Ordering;
 using Autofac.Features.Metadata;
@@ -90,6 +91,53 @@ namespace Unit.Tests
             Assert.Equal(new[] { 3, 1, 2 }, dependencies.Select(d => d.Metadata.Data));
         }
 
+        [Fact(Skip = "Not supported by Autofac.")]
+        public void Test_With_Subset_Of_Types_And_Additional_Metadata()
+        {
+            // Arrange.
+            _builder.Register(_ => new Dependency("dep 3")).As<IDependency>()
+                    .OrderBy(d => d.Name)
+                    .WithMetadata<AdditionalMetadata>(m => m.For(p => p.Data, 1));
+
+            _builder.Register(_ => new OtherDependency("dep 1")).As<IDependency>();
+
+            _builder.Register(_ => new Dependency("dep 2")).As<IDependency>()
+                    .OrderBy(d => d.Name)
+                    .WithMetadata<AdditionalMetadata>(m => m.For(p => p.Data, 2));
+
+            var container = _builder.Build();
+
+            // Act.
+            var dependencies = container.Resolve<IOrderedEnumerable<Meta<IDependency, AdditionalMetadata>>>();
+
+            // Assert.
+            Assert.Equal(new[] { "dep 2", "dep 3" }, dependencies.Select(d => d.Value.Name));
+            Assert.Equal(new[] { 2, 1 }, dependencies.Select(d => d.Metadata.Data));
+        }
+
+        [Fact(Skip = "Not supported by Autofac.")]
+        public void Test_Autofac_With_Additional_Metadata()
+        {
+            // Arrange.
+            _builder.Register(_ => new Dependency("dep 3")).As<IDependency>()
+                    .WithMetadata<AdditionalMetadata>(m => m.For(p => p.Data, 1));
+
+            _builder.Register(_ => new OtherDependency("dep 1")).As<IDependency>()
+                    .WithMetadata<AdditionalMetadata2>(m => m.For(p => p.Derp, "12"));
+
+            _builder.Register(_ => new Dependency("dep 2")).As<IDependency>()
+                    .WithMetadata<AdditionalMetadata>(m => m.For(p => p.Data, 2));
+
+            var container = _builder.Build();
+
+            // Act.
+            var dependencies = container.Resolve<IEnumerable<Meta<IDependency, AdditionalMetadata>>>();
+
+            // Assert.
+            Assert.Equal(new[] { "dep 2", "dep 3" }, dependencies.Select(d => d.Value.Name));
+            Assert.Equal(new[] { 2, 1 }, dependencies.Select(d => d.Metadata.Data));
+        }
+
         [Fact]
         public void Test_Using_OrderByRegistration_For_Scanned_Types()
         {
@@ -169,6 +217,11 @@ namespace Unit.Tests
         private class AdditionalMetadata
         {
             public int Data { get; set; }
+        }
+
+        private class AdditionalMetadata2
+        {
+            public string Derp { get; set; }
         }
     }
 }
