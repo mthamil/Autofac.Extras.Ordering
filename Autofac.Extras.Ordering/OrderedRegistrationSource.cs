@@ -46,15 +46,12 @@ namespace Autofac.Extras.Ordering
         /// of other components (ie. like Meta, Func, or Owned.)
         /// </summary>
         /// <remarks>Always returns false.</remarks>
-        public bool IsAdapterForIndividualComponents { get { return false; } }
+        public bool IsAdapterForIndividualComponents => false;
 
         /// <summary>
         /// A description of the registration source.
         /// </summary>
-        public override string ToString()
-        {
-            return OrderedRegistrationSourceResources.OrderedRegistrationSourceDescription;
-        }
+        public override string ToString() => OrderedRegistrationSourceResources.OrderedRegistrationSourceDescription;
 
         private static IComponentRegistration CreateOrderedRegistration<TService>()
         {
@@ -68,7 +65,7 @@ namespace Autofac.Extras.Ordering
         }
 
         private static readonly MethodInfo CreateRegistrationMethod =
-            typeof(OrderedRegistrationSource).GetMethod("CreateOrderedRegistration",
+            typeof(OrderedRegistrationSource).GetMethod(nameof(CreateOrderedRegistration),
                                                         BindingFlags.NonPublic |
                                                         BindingFlags.Static);
 
