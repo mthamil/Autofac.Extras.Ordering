@@ -12,7 +12,7 @@ namespace Autofac.Extras.Ordering.Utilities
         /// </summary>
         public static bool IsInstanceOfGenericType(this Type type, Type genericTypeDefinition)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == genericTypeDefinition;
+            return type.IsConstructedGenericType && type.GetGenericTypeDefinition() == genericTypeDefinition;
         }
     }
 }

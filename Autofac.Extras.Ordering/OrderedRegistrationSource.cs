@@ -28,7 +28,7 @@ namespace Autofac.Extras.Ordering
                 var serviceType = typedService.ServiceType;
                 if (serviceType.IsInstanceOfGenericType(typeof(IOrderedEnumerable<>)))
                 {
-                    var dependencyType = serviceType.GetGenericArguments().Single();
+                    var dependencyType = serviceType.GenericTypeArguments.Single();
 
                     var registration = (IComponentRegistration)CreateRegistrationMethod
                         .MakeGenericMethod(dependencyType)
@@ -65,9 +65,8 @@ namespace Autofac.Extras.Ordering
         }
 
         private static readonly MethodInfo CreateRegistrationMethod =
-            typeof(OrderedRegistrationSource).GetMethod(nameof(CreateOrderedRegistration),
-                                                        BindingFlags.NonPublic |
-                                                        BindingFlags.Static);
+            typeof(OrderedRegistrationSource).GetRuntimeMethods()
+                                             .Single(m => m.Name == nameof(CreateOrderedRegistration));
 
         internal const string OrderingMetadataKey = "AutofacOrderingMetadataKey";
     }

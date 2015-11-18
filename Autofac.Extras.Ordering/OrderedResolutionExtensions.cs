@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Autofac.Core;
 using Autofac.Extras.Ordering.Utilities;
 using Autofac.Features.Metadata;
@@ -73,7 +74,7 @@ namespace Autofac.Extras.Ordering
             if (!IsMetadata(type))
                 return value;
 
-            return UnwrapValue(type.GetProperty("Value").GetValue(value)); // Unwrap a layer of metadata.
+            return UnwrapValue(type.GetRuntimeProperty(nameof(Meta<object>.Value)).GetValue(value)); // Unwrap a layer of metadata.
         }
 
         private static bool IsMetadata(Type type)

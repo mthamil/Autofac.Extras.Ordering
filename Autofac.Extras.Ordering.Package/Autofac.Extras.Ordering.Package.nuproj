@@ -13,6 +13,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Package' ">
+    <OutputPath>bin\Package\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Autofac.Extras.Ordering.nuspec" />
   </ItemGroup>
