@@ -7,7 +7,7 @@ By default, order is not guaranteed when resolving IEnumerable&lt;T&gt;.
 
 Download
 ========
-Visit https://www.nuget.org/packages/Autofac.Extras.Ordering/ to download.
+Visit [![NuGet](https://img.shields.io/nuget/v/Autofac.Extras.Ordering.svg)](https://www.nuget.org/packages/Autofac.Extras.Ordering/) to download.
 
 Usage
 =====
