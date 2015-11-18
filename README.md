@@ -3,6 +3,8 @@ Autofac.Extras.Ordering
 An Autofac extension that adds recognition of IOrderedEnumerable&lt;T&gt; as a relationship type, allowing multiple dependencies to be resolved in a guaranteed order. 
 By default, order is not guaranteed when resolving IEnumerable&lt;T&gt;.
 
+[![Build status](https://ci.appveyor.com/api/projects/status/fs6orqg3oiqk9p8l)](https://ci.appveyor.com/project/mthamil/autofac-extras-ordering)
+
 Download
 ========
 Visit https://www.nuget.org/packages/Autofac.Extras.Ordering/ to download.
