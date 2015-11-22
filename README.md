@@ -1,7 +1,7 @@
 Autofac.Extras.Ordering
 =======================
-An Autofac extension that adds recognition of IOrderedEnumerable&lt;T&gt; as a relationship type, allowing multiple dependencies to be resolved in a guaranteed order. 
-By default, order is not guaranteed when resolving IEnumerable&lt;T&gt;.
+An Autofac extension that adds recognition of `IOrderedEnumerable<T>` as a relationship type, allowing multiple dependencies to be resolved in a guaranteed order. 
+By default, order is not guaranteed when resolving `IEnumerable<T>`.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/fs6orqg3oiqk9p8l)](https://ci.appveyor.com/project/mthamil/autofac-extras-ordering)
 
@@ -11,7 +11,7 @@ Visit [![NuGet](https://img.shields.io/nuget/v/Autofac.Extras.Ordering.svg)](htt
 
 Usage
 =====
-First, declare a constructor argument of type IOrderedEnumerable&lt;TDependency&gt; for the component dependent on multiple services:
+First, declare a constructor argument of type `IOrderedEnumerable<TDependency>` for the component dependent on multiple services:
 
 ```C#
     public class SomeComponent
@@ -41,7 +41,7 @@ Then, register that component as usual:
     builder.RegisterType<SomeComponent>();
 ```
 
-Next, register dependencies with the order in which they should be provided using the extension method .OrderBy().
+Next, register dependencies with the order in which they should be provided using the extension method `.OrderBy()`.
 
 A constant order may be used:
 ```C#
@@ -61,9 +61,9 @@ Or, a function may be provided that determines the order based on a dependency's
            .OrderBy(d => d.Name);
 ```
 
-Finally, add the OrderedRegistrationSource to enable support for IOrderedEnumerable&lt;T&gt;:
+Finally, add the OrderedRegistrationSource to enable support for `IOrderedEnumerable<T>`:
 ```C#
     builder.RegisterSource(new OrderedRegistrationSource());
 ```
 
-When SomeComponent is resolved, it will be supplied with Dependencies sorted by the order each was given.
+When `SomeComponent` is resolved, it will be supplied with Dependencies sorted by the order each was given.
