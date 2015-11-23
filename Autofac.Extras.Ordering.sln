@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit.Tests", "Unit.Tests\Unit.Tests.csproj", "{F4C42080-DCD0-4169-B919-4645B03B7039}"
 EndProject
-Project("{E09DD79A-4488-4AB9-8D3F-A7EEE78BF432}") = "Autofac.Extras.Ordering.Package", "Autofac.Extras.Ordering.Package\Autofac.Extras.Ordering.Package.nuproj", "{1E1F9218-AB51-4CBA-AB52-7A3D8959B87D}"
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "Autofac.Extras.Ordering.Package", "Autofac.Extras.Ordering.Package\Autofac.Extras.Ordering.Package.nuproj", "{D64B6FDA-9406-46DE-9AE2-F8B2454F323A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{A5E7488F-E3B7-4D25-9F65-8008439FE913}"
 EndProject
@@ -49,10 +49,10 @@ Global
 		{F4C42080-DCD0-4169-B919-4645B03B7039}.Package|Any CPU.Build.0 = Package|Any CPU
 		{F4C42080-DCD0-4169-B919-4645B03B7039}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4C42080-DCD0-4169-B919-4645B03B7039}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E1F9218-AB51-4CBA-AB52-7A3D8959B87D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E1F9218-AB51-4CBA-AB52-7A3D8959B87D}.Package|Any CPU.ActiveCfg = Package|Any CPU
-		{1E1F9218-AB51-4CBA-AB52-7A3D8959B87D}.Package|Any CPU.Build.0 = Package|Any CPU
-		{1E1F9218-AB51-4CBA-AB52-7A3D8959B87D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D64B6FDA-9406-46DE-9AE2-F8B2454F323A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D64B6FDA-9406-46DE-9AE2-F8B2454F323A}.Package|Any CPU.ActiveCfg = Package|Any CPU
+		{D64B6FDA-9406-46DE-9AE2-F8B2454F323A}.Package|Any CPU.Build.0 = Package|Any CPU
+		{D64B6FDA-9406-46DE-9AE2-F8B2454F323A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

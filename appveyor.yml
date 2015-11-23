@@ -37,6 +37,13 @@ build:
 cache:
   - packages -> **\packages.config
 
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: 2.0.0.0
+  assembly_file_version: 2.0.0.0
+  assembly_informational_version: '{version}'
+
 nuget:
   project_feed: true
 

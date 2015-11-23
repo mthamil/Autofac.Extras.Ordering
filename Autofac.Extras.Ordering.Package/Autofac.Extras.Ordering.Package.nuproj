@@ -1,30 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|AnyCPU">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Package|AnyCPU">
+      <Configuration>Package</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectCapability Include="CPS" />
+    <ProjectCapability Include="AssemblyReferences" />
+    <ProjectCapability Include="DeclaredSourceItems" />
+    <ProjectCapability Include="UserSourceItems" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Autofac.Extras.Ordering\Autofac.Extras.Ordering.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>d64b6fda-9406-46de-9ae2-f8b2454f323a</ProjectGuid>
+  </PropertyGroup>
   <PropertyGroup>
-    <ProjectGuid>1e1f9218-ab51-4cba-ab52-7a3d8959b87d</ProjectGuid>
-    <OutputPath>Bin\</OutputPath>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <NuBuildVersionSource>Library</NuBuildVersionSource>
-    <NuBuildVersionFileName>True</NuBuildVersionFileName>
-    <NuBuildAddBinariesToSubfolder>True</NuBuildAddBinariesToSubfolder>
-    <NuBuildIncludePdbs>False</NuBuildIncludePdbs>
+    <NuProjPath Condition=" '$(NuProjPath)' == '' ">$(SolutionDir)packages\NuProj.0.10.4-beta-gf7fc34e7d8\tools\</NuProjPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+  <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
+  <PropertyGroup Label="Configuration">
+    <Id>Autofac.Extras.Ordering</Id>
+    <Version>2.1.0</Version>
+    <Title>Autofac Ordered Dependencies</Title>
+    <Authors>Matt Hamilton</Authors>
+    <Owners>Matt Hamilton</Owners>
+    <Summary>An Autofac extension that enables ordered resolution of multiple dependencies.</Summary>
+    <Description>An Autofac extension that adds recognition of IOrderedEnumerable&lt;T&gt; as a relationship type, allowing multiple dependencies to be resolved in a guaranteed order.</Description>
+    <ReleaseNotes>
+    </ReleaseNotes>
+    <ProjectUrl>https://github.com/mthamil/Autofac.Extras.Ordering</ProjectUrl>
+    <LicenseUrl>http://www.apache.org/licenses/LICENSE-2.0.txt</LicenseUrl>
+    <Copyright>Copyright © Matt Hamilton 2015</Copyright>
+    <Tags>
+    </Tags>
+    <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Package' ">
-    <OutputPath>bin\Package\</OutputPath>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="Autofac.Extras.Ordering.nuspec" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Autofac.Extras.Ordering\Autofac.Extras.Ordering.csproj">
-      <Name>Autofac.Extras.Ordering</Name>
-      <Project>{45a65713-6056-4ed4-8b11-1ac4af51c6cf}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(ProjectDir)..\.build\NuBuild\v1\NuBuild.targets" />
+  <Import Project="$(NuProjPath)\NuProj.targets" />
 </Project>
