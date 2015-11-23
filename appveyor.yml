@@ -53,4 +53,4 @@ nuget:
 #---------------------------------#
 
 artifacts:
-  - path: Autofac.Extras.Ordering.Package\Bin\Autofac.Extras.Ordering.*.nupkg
+  - path: Autofac.Extras.Ordering.Package\bin\$(CONFIGURATION)\Autofac.Extras.Ordering.*.nupkg
