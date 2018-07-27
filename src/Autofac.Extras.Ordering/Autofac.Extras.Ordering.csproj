@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.1</TargetFramework>
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <IncludeSymbols>True</IncludeSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Product>Autofac.Extras.Ordering</Product>
+    <Title>Autofac Ordered Dependencies</Title>
+    <PackageSummary>An Autofac extension that enables ordered resolution of multiple dependencies.</PackageSummary>
+    <Description>An Autofac extension that adds recognition of IOrderedEnumerable&lt;T&gt; as a relationship type, allowing multiple dependencies to be resolved in a guaranteed order.</Description>
+    <Authors>Matt Hamilton</Authors>
+    <Copyright>Copyright 2018 Matt Hamilton</Copyright>
+    <PackageProjectUrl>https://github.com/mthamil/Autofac.Extras.Ordering</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mthamil/Autofac.Extras.Ordering</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/mthamil/Autofac.Extras.Ordering/master/LICENSE</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="OrderedRegistrationSourceResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OrderedRegistrationSourceResources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="OrderedRegistrationSourceResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderedRegistrationSourceResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
