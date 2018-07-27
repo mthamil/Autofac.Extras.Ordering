@@ -54,7 +54,7 @@ test_script:
 #---------------------------------#
 
 artifacts:
-  - path: **\Autofac.Extras.Ordering.*.nupkg
+  - path: '**\Autofac.Extras.Ordering.*.nupkg'
 
 
 #---------------------------------#
