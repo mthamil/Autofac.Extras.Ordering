@@ -7,12 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autofac.Extras.Ordering", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unit.Tests", "Unit.Tests\Unit.Tests.csproj", "{F4C42080-DCD0-4169-B919-4645B03B7039}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{04FBCB7F-0B89-4B99-8E37-285E6F697E4F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C48A6072-B5BB-4DED-80E2-D2F998E1C531}"
 	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
-		appveyor.yml = appveyor.yml
-		LICENSE = LICENSE
-		README.md = README.md
+		..\.gitignore = ..\.gitignore
+		..\appveyor.yml = ..\appveyor.yml
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Global
