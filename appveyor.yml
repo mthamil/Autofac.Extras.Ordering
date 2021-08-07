@@ -55,6 +55,7 @@ test_script:
 
 artifacts:
   - path: '**\Autofac.Extras.Ordering.*.nupkg'
+  - path: '**\Autofac.Extras.Ordering.*.snupkg'
 
 
 #---------------------------------#
@@ -71,4 +72,4 @@ deploy:
       secure: VOaYI1+EvQwGtmO+ypTz8MbWinrZGsv/6Ecd7rWCHoBA+ONhuQ1W0e465dLfCtpZ
     skip_symbols: false
     symbol_server: # SymbolSource.org
-    artifact: /.*\.nupkg/
+    artifact: /.*(\.|\.s)nupkg/
