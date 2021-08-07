@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # Operating system (build VM template)
-os: Visual Studio 2017
+os: Visual Studio 2019
 
 environment:  
   major: 4
@@ -17,10 +17,11 @@ init:
   - ps: |
       $isCI = $Env:APPVEYOR_REPO_TAG -eq $false
       $isBranch = $isCI -and ($Env:APPVEYOR_REPO_BRANCH -ne 'master')
-      $branchSuffix = "$(if ($isBranch) { '-' + $Env:APPVEYOR_REPO_BRANCH } else { $null })"
+      $branchTag = "$(if ($isBranch) { $Env:APPVEYOR_REPO_BRANCH + '.' } else { $null })"
       $Env:VersionPrefix = "$($Env:major).$($Env:minor).$($Env:patch)"
-      $Env:VersionSuffix = "$(if ($isCI) { 'CI' + $Env:APPVEYOR_BUILD_NUMBER + $branchSuffix } else { $null })"
-      appveyor UpdateBuild -Version "$($Env:VersionPrefix)$(if ($isCI) { '-' } else { $null })$($Env:VersionSuffix)"
+      $Env:VersionSuffix = "$(if ($isCI) { $branchTag + 'CI' + $Env:APPVEYOR_BUILD_NUMBER } else { $null })"
+      $Env:SemanticVersion = "$($Env:VersionPrefix)$(if ($isCI) { '-' } else { $null })$($Env:VersionSuffix)"
+      appveyor UpdateBuild -Version $Env:SemanticVersion
 
 #---------------------------------#
 #       build configuration       #
@@ -31,8 +32,7 @@ configuration: Release
 
 # scripts to run before build
 before_build:
-  - cd src
-  - dotnet restore
+  - dotnet restore src
 
 build:
   verbosity: minimal               # MSBuild verbosity level
@@ -46,7 +46,7 @@ nuget:
 #---------------------------------#
 
 test_script:
-  - ps: Get-ChildItem *.Tests | % { cd $_; dotnet xunit --configuration $Env:CONFIGURATION --no-build; cd ..; }
+  - ps: Get-ChildItem src\*.Tests | % { dotnet test --configuration $Env:CONFIGURATION --no-build $_ }
 
 
 #---------------------------------#
@@ -68,7 +68,7 @@ deploy:
       appveyor_repo_tag: true
     server: # nuget.org
     api_key:
-      secure: NPuXv53mhVj9uqIWCqDfbU0I9OP8wkdJwB09ZSBLt/Z0q9znnvzzRqiW/ia5Yn9d
+      secure: VOaYI1+EvQwGtmO+ypTz8MbWinrZGsv/6Ecd7rWCHoBA+ONhuQ1W0e465dLfCtpZ
     skip_symbols: false
     symbol_server: # SymbolSource.org
     artifact: /.*\.nupkg/
