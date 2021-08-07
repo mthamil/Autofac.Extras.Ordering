@@ -17,10 +17,11 @@ init:
   - ps: |
       $isCI = $Env:APPVEYOR_REPO_TAG -eq $false
       $isBranch = $isCI -and ($Env:APPVEYOR_REPO_BRANCH -ne 'master')
-      $branchSuffix = "$(if ($isBranch) { '-' + $Env:APPVEYOR_REPO_BRANCH } else { $null })"
+      $branchTag = "$(if ($isBranch) { $Env:APPVEYOR_REPO_BRANCH + '-' } else { $null })"
       $Env:VersionPrefix = "$($Env:major).$($Env:minor).$($Env:patch)"
-      $Env:VersionSuffix = "$(if ($isCI) { 'CI' + $Env:APPVEYOR_BUILD_NUMBER + $branchSuffix } else { $null })"
-      appveyor UpdateBuild -Version "$($Env:VersionPrefix)$(if ($isCI) { '-' } else { $null })$($Env:VersionSuffix)"
+      $Env:VersionSuffix = "$(if ($isCI) { $branchTag + 'CI' + $Env:APPVEYOR_BUILD_NUMBER } else { $null })"
+      $Env:SemanticVersion = "$($Env:VersionPrefix)$(if ($isCI) { '-' } else { $null })$($Env:VersionSuffix)"
+      appveyor UpdateBuild -Version $Env:SemanticVersion
 
 #---------------------------------#
 #       build configuration       #
